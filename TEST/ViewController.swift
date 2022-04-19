@@ -2,14 +2,14 @@
 import UIKit
 import Foundation
 
-class CustomCell : UITableViewCell{
-    
-    @IBOutlet var expand_collapseBttn: UIButton!
-    @IBOutlet var postTitle: UILabel!
-    @IBOutlet var likesCounter: UILabel!
-    @IBOutlet var prewiewText: UILabel!
-    @IBOutlet var timeCounter: UILabel!
-}
+//class CustomCell : UITableViewCell{
+//    
+//    @IBOutlet var expand_collapseBttn: UIButton!
+//    @IBOutlet var postTitle: UILabel!
+//    @IBOutlet var likesCounter: UILabel!
+//    @IBOutlet var prewiewText: UILabel!
+//    @IBOutlet var timeCounter: UILabel!
+//}
 
 class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate {
   
@@ -20,7 +20,7 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
     var filterCategory = ["date","rate"]
     var toolBar = UIToolbar()
     var picker  = UIPickerView()
-    
+    var flag : Bool = true
  
     @IBOutlet var postsTableView: UITableView!
     @IBOutlet var filterBttn: UIBarButtonItem!
@@ -65,28 +65,22 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    
-        let cell = postsTableView.dequeueReusableCell(withIdentifier: "postsTableView", for: indexPath) as! CustomCell
-        cell.expand_collapseBttn.isHidden = true
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MyCustomTableViewCell", for: indexPath) as! MyCustomTableViewCell
+        cell.expandBttn.isHidden = true
         if let dataForTableView = dataForTableView{
-            cell.postTitle.text = dataForTableView.posts[indexPath.row].title
-            cell.likesCounter.text = String(dataForTableView.posts[indexPath.row].likes_count)
-            cell.prewiewText.text = dataForTableView.posts[indexPath.row].preview_text
-            cell.timeCounter.text = String(dataForTableView.posts[indexPath.row].timeshamp)
+              cell.titleLbl.text = dataForTableView.posts[indexPath.row].title
+              cell.likesLbl.text = String(dataForTableView.posts[indexPath.row].likes_count)
+              cell.textViewLbl.text = dataForTableView.posts[indexPath.row].preview_text
+              cell.timesLbl.text = String(dataForTableView.posts[indexPath.row].timeshamp)
         }
-        cell.expand_collapseBttn.layer.cornerRadius = 10
-        print(cell.prewiewText.maxNumberOfLines)
-        let countOfLineInTxt = cell.prewiewText.maxNumberOfLines
-        if countOfLineInTxt > 2{
-            let button = UIButton()
-            button.backgroundColor = .blue
-            cell.addSubview(button)
-            cell.prewiewText.numberOfLines = 2
-            cell.expand_collapseBttn.isHidden = false
+        cell.expandBttn.layer.cornerRadius = 10
+        cell.controller = self
+        print(cell.textViewLbl.maxNumberOfLines)
+        let countOfLineInTxt = cell.textViewLbl.maxNumberOfLines
+        if countOfLineInTxt > 2 {
+            cell.expandBttn.isHidden = false
             print("Succes")
-            
         }
-
         return cell
     }
     
@@ -100,7 +94,6 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-       // print("Preparing+ \(segue.destination)")
         guard let detailVC = segue.destination as? DetailViewController else { return }
         detailVC.postId = postIdForDetailView
     }
@@ -108,13 +101,18 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
     override func viewDidLoad() {
        
         super.viewDidLoad()
+        postsTableView.register(UINib(nibName: "MyCustomTableViewCell", bundle: nil), forCellReuseIdentifier: "MyCustomTableViewCell")
         postsTableView.rowHeight = UITableView.automaticDimension
-        postsTableView.estimatedRowHeight = 280
+        postsTableView.estimatedRowHeight = 580
         postsTableView.delegate = self
         postsTableView.dataSource = self
         
         let url = "https://raw.githubusercontent.com/anton-natife/jsons/master/api/main.json"
         getData(from: url)
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
     }
     
     private func getData(from url: String){
