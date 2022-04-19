@@ -2,7 +2,7 @@
 //  DetailViewController.swift
 //  TEST
 //
-//  Created by Oleh Makhobei on 17.04.2022.
+//  Created by Olena Makhobei on 17.04.2022.
 //
 
 import Foundation
@@ -20,14 +20,9 @@ class DetailViewController: UIViewController{
     
     
     override func viewDidLoad() {
-       
         let url = "https://raw.githubusercontent.com/anton-natife/jsons/master/api/posts/\(postId!).json"
         getData(from: url)
-  
-        
     }
-    
-    
     
     private func getData(from url: String){
         let task = URLSession.shared.dataTask(with: URL(string: url)!, completionHandler: {data, response, error in
@@ -48,6 +43,7 @@ class DetailViewController: UIViewController{
                     self.tittlePost.numberOfLines = 0
                     self.descriptionPost.text = result?.post.text
                     self.descriptionPost.isEditable = false
+                    
                     self.like_counterPost.text = String(result?.post.likes_count ?? 00)
                     self.time_counterPost.text = String(result?.post.timeshamp ?? 00)
                     

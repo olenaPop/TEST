@@ -1,15 +1,10 @@
-//
-//  ViewController.swift
-//  TEST
-//
-//  Created by Oleh Makhobei on 17.04.2022.
-//
 
 import UIKit
 import Foundation
 
 class CustomCell : UITableViewCell{
     
+    @IBOutlet var expand_collapseBttn: UIButton!
     @IBOutlet var postTitle: UILabel!
     @IBOutlet var likesCounter: UILabel!
     @IBOutlet var prewiewText: UILabel!
@@ -44,24 +39,19 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
          toolBar.barStyle = .black
          toolBar.items = [UIBarButtonItem.init(title: "Done", style: .done, target: self, action: #selector(onDoneButtonTapped))]
          self.view.addSubview(toolBar)
-        
-//
-       // postsTableView.reloadData()
          
     }
     @objc func onDoneButtonTapped() {
         toolBar.removeFromSuperview()
-        print(filterParam)
+       // print(filterParam)
         let sortedDataByRate  =  dataForTableView?.posts.sorted(by: {$0.likes_count > $1.likes_count})
         let sortedDataByDate = dataForTableView?.posts.sorted(by: {$0.timeshamp > $1.timeshamp})
                    if filterParam == "date"{
                        self.dataForTableView = PostResponse(posts: sortedDataByDate!)
                    }
                    else if filterParam == "rate"{
-     
                        self.dataForTableView = PostResponse(posts: sortedDataByRate!)
                    }
-        
         picker.removeFromSuperview()
         postsTableView.reloadData()
        
@@ -75,14 +65,28 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = postsTableView.dequeueReusableCell(withIdentifier: "postsTableView", for: indexPath) as! CustomCell
     
+        let cell = postsTableView.dequeueReusableCell(withIdentifier: "postsTableView", for: indexPath) as! CustomCell
+        cell.expand_collapseBttn.isHidden = true
         if let dataForTableView = dataForTableView{
             cell.postTitle.text = dataForTableView.posts[indexPath.row].title
             cell.likesCounter.text = String(dataForTableView.posts[indexPath.row].likes_count)
             cell.prewiewText.text = dataForTableView.posts[indexPath.row].preview_text
             cell.timeCounter.text = String(dataForTableView.posts[indexPath.row].timeshamp)
         }
+        cell.expand_collapseBttn.layer.cornerRadius = 10
+        print(cell.prewiewText.maxNumberOfLines)
+        let countOfLineInTxt = cell.prewiewText.maxNumberOfLines
+        if countOfLineInTxt > 2{
+            let button = UIButton()
+            button.backgroundColor = .blue
+            cell.addSubview(button)
+            cell.prewiewText.numberOfLines = 2
+            cell.expand_collapseBttn.isHidden = false
+            print("Succes")
+            
+        }
+
         return cell
     }
     
@@ -104,6 +108,8 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
     override func viewDidLoad() {
        
         super.viewDidLoad()
+        postsTableView.rowHeight = UITableView.automaticDimension
+        postsTableView.estimatedRowHeight = 280
         postsTableView.delegate = self
         postsTableView.dataSource = self
         
@@ -135,7 +141,7 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
             {
                 return
             }
-           // print(json.posts)
+            print(json.posts)
             
          })
         task.resume()
@@ -159,5 +165,16 @@ extension ViewController : UIPickerViewDelegate, UIPickerViewDataSource {
         
     }
     
+}
+
+extension UILabel {
+
+    var maxNumberOfLines: Int {
+           let maxSize = CGSize(width: frame.size.width, height: CGFloat(MAXFLOAT))
+           let text = (self.text ?? "") as NSString
+        let textHeight = text.boundingRect(with: maxSize, options: .usesLineFragmentOrigin, attributes: [.font: font!], context: nil).height
+           let lineHeight = font.lineHeight
+           return Int(ceil(textHeight / lineHeight))
+       }
 }
 

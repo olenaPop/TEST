@@ -2,7 +2,7 @@
 //  Post.swift
 //  TEST
 //
-//  Created by Oleh Makhobei on 17.04.2022.
+//  Created by Olena Makhobei on 17.04.2022.
 //
 
 import Foundation

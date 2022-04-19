@@ -15,6 +15,8 @@
 		FC28FD7D280C1F7E0057DE4D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC28FD7B280C1F7E0057DE4D /* LaunchScreen.storyboard */; };
 		FC28FD86280C21820057DE4D /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC28FD85280C21820057DE4D /* Post.swift */; };
 		FC28FD8E280C4B630057DE4D /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC28FD8D280C4B630057DE4D /* DetailViewController.swift */; };
+		FC301300280EBA1300D2C4CD /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3012FE280EBA1300D2C4CD /* CustomTableViewCell.swift */; };
+		FC301301280EBA1300D2C4CD /* CustomTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FC3012FF280EBA1300D2C4CD /* CustomTableViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +30,8 @@
 		FC28FD7E280C1F7E0057DE4D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FC28FD85280C21820057DE4D /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		FC28FD8D280C4B630057DE4D /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		FC3012FE280EBA1300D2C4CD /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
+		FC3012FF280EBA1300D2C4CD /* CustomTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomTableViewCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +68,8 @@
 				FC28FD70280C1F7A0057DE4D /* AppDelegate.swift */,
 				FC28FD72280C1F7A0057DE4D /* SceneDelegate.swift */,
 				FC28FD76280C1F7A0057DE4D /* Main.storyboard */,
+				FC3012FE280EBA1300D2C4CD /* CustomTableViewCell.swift */,
+				FC3012FF280EBA1300D2C4CD /* CustomTableViewCell.xib */,
 				FC28FD8D280C4B630057DE4D /* DetailViewController.swift */,
 				FC28FD79280C1F7E0057DE4D /* Assets.xcassets */,
 				FC28FD7B280C1F7E0057DE4D /* LaunchScreen.storyboard */,
@@ -132,6 +138,7 @@
 			files = (
 				FC28FD7D280C1F7E0057DE4D /* LaunchScreen.storyboard in Resources */,
 				FC28FD7A280C1F7E0057DE4D /* Assets.xcassets in Resources */,
+				FC301301280EBA1300D2C4CD /* CustomTableViewCell.xib in Resources */,
 				FC28FD78280C1F7A0057DE4D /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -143,6 +150,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC301300280EBA1300D2C4CD /* CustomTableViewCell.swift in Sources */,
 				FC28FD75280C1F7A0057DE4D /* ViewController.swift in Sources */,
 				FC28FD71280C1F7A0057DE4D /* AppDelegate.swift in Sources */,
 				FC28FD8E280C4B630057DE4D /* DetailViewController.swift in Sources */,
