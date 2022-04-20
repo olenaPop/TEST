@@ -25,12 +25,15 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
          picker.contentMode = .center
          picker.frame = CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 300, width: UIScreen.main.bounds.size.width, height: 300)
          self.view.addSubview(picker)
+        
          toolBar = UIToolbar.init(frame: CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 300, width: UIScreen.main.bounds.size.width, height: 50))
          toolBar.barStyle = .black
+        
          toolBar.items = [UIBarButtonItem.init(title: "Done", style: .done, target: self, action: #selector(onDoneButtonTapped))]
          self.view.addSubview(toolBar)
          
     }
+    
     @objc func onDoneButtonTapped() {
         toolBar.removeFromSuperview()
         let sortedDataByRate  =  dataForTableView?.posts.sorted(by: {$0.likes_count > $1.likes_count})
@@ -62,6 +65,8 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
               cell.likesLbl.text = String(dataForTableView.posts[indexPath.row].likes_count)
               cell.textViewLbl.text = dataForTableView.posts[indexPath.row].preview_text
               cell.timesLbl.text = String(dataForTableView.posts[indexPath.row].timeshamp)
+              let date = Date(timeIntervalSince1970: TimeInterval(dataForTableView.posts[indexPath.row].timeshamp))
+              cell.timesLbl.text = formatDate(pastDate: date)
         }
         cell.expandBttn.layer.cornerRadius = 5
         cell.controller = self
@@ -73,6 +78,9 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
         }
         return cell
     }
+    
+ 
+    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let dataForTableView = dataForTableView
@@ -88,6 +96,30 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
         detailVC.postId = postIdForDetailView
     }
 
+    func formatDate(pastDate :Date) -> String{
+        
+        let todayDate = Date()
+        let interval = Calendar.current.dateComponents([.year, .month, .day], from:pastDate , to: todayDate)
+        print(todayDate)
+        print(pastDate)
+        print(interval)
+        
+            if let year = interval.year, year > 0 {
+                return year == 1 ? "\(year)" + " " + "year ago" :
+                    "\(year)" + " " + "years ago"
+            } else if let month = interval.month, month > 0 {
+                return month == 1 ? "\(month)" + " " + "month ago" :
+                    "\(month)" + " " + "months ago"
+            } else if let day = interval.day, day > 0 {
+                return day == 1 ? "\(day)" + " " + "day ago" :
+                    "\(day)" + " " + "days ago"
+            } else {
+                return "a moment ago"
+
+            }
+
+        }
+    
     override func viewDidLoad() {
        
         super.viewDidLoad()
@@ -169,3 +201,4 @@ enum FilterParam : String{
     case DATE =  "Sort by: Date"
     case RATE =  "Sort by: Rate"
 }
+

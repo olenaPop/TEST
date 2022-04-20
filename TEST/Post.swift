@@ -18,7 +18,7 @@ import UIKit
 
 struct Posts : Codable{
     var postId : Int
-    var timeshamp : Int
+    var timeshamp : Double
     var title : String
     var preview_text : String
     var likes_count : Int
@@ -31,7 +31,7 @@ struct Posts : Codable{
 
 struct PostDetail : Codable {
             var postId : Int
-            var timeshamp : Int
+            var timeshamp : Double
             var title : String
             var text: String
             var postImage: String
@@ -57,8 +57,19 @@ extension UIImageView {
             }
         }.resume()
     }
-    func downloaded(from link: String, contentMode mode: ContentMode = .scaleAspectFit) {
+    func downloaded(from link: String, contentMode mode: ContentMode = .scaleAspectFill) {
         guard let url = URL(string: link) else { return }
         downloaded(from: url, contentMode: mode)
+    }
+}
+extension Double {
+    func getDateStringFromUTC() -> String {
+        let date = Date(timeIntervalSince1970: self)
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "en_US")
+        dateFormatter.dateStyle = .medium
+
+        return dateFormatter.string(from: date)
     }
 }

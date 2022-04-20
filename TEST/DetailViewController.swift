@@ -43,7 +43,6 @@ class DetailViewController: UIViewController{
                     self.tittlePost.numberOfLines = 0
                     self.descriptionPost.text = result?.post.text
                     self.descriptionPost.isEditable = false
-                    
                     self.like_counterPost.text = String(result?.post.likes_count ?? 00)
                     self.time_counterPost.text = String(result?.post.timeshamp ?? 00)
                     
