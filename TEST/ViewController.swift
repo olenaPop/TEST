@@ -2,15 +2,6 @@
 import UIKit
 import Foundation
 
-//class CustomCell : UITableViewCell{
-//    
-//    @IBOutlet var expand_collapseBttn: UIButton!
-//    @IBOutlet var postTitle: UILabel!
-//    @IBOutlet var likesCounter: UILabel!
-//    @IBOutlet var prewiewText: UILabel!
-//    @IBOutlet var timeCounter: UILabel!
-//}
-
 class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate {
   
     var postIdForDetailView : Int?
@@ -21,6 +12,7 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
     var toolBar = UIToolbar()
     var picker  = UIPickerView()
     var flag : Bool = true
+    var countOfLineInTxt : Int?
  
     @IBOutlet var postsTableView: UITableView!
     @IBOutlet var filterBttn: UIBarButtonItem!
@@ -66,20 +58,24 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MyCustomTableViewCell", for: indexPath) as! MyCustomTableViewCell
+        
         cell.expandBttn.isHidden = true
+       //
         if let dataForTableView = dataForTableView{
               cell.titleLbl.text = dataForTableView.posts[indexPath.row].title
               cell.likesLbl.text = String(dataForTableView.posts[indexPath.row].likes_count)
               cell.textViewLbl.text = dataForTableView.posts[indexPath.row].preview_text
               cell.timesLbl.text = String(dataForTableView.posts[indexPath.row].timeshamp)
         }
-        cell.expandBttn.layer.cornerRadius = 10
+        cell.expandBttn.layer.cornerRadius = 5
         cell.controller = self
-        print(cell.textViewLbl.maxNumberOfLines)
         let countOfLineInTxt = cell.textViewLbl.maxNumberOfLines
+//        cell.expandBttn.heightAnchor.constraint(equalToConstant: 0).isActive = true
         if countOfLineInTxt > 2 {
             cell.expandBttn.isHidden = false
-            print("Succes")
+            cell.expandBttn.heightAnchor.constraint(equalToConstant: 50).isActive = true
+           
+             print("Succes")
         }
         return cell
     }
