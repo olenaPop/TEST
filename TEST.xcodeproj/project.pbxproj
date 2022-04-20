@@ -68,13 +68,13 @@
 				FC28FD70280C1F7A0057DE4D /* AppDelegate.swift */,
 				FC28FD72280C1F7A0057DE4D /* SceneDelegate.swift */,
 				FC28FD76280C1F7A0057DE4D /* Main.storyboard */,
+				FC28FD85280C21820057DE4D /* Post.swift */,
 				FC30130D280EFBB100D2C4CD /* MyCustomTableViewCell.swift */,
 				FC30130E280EFBB100D2C4CD /* MyCustomTableViewCell.xib */,
 				FC28FD8D280C4B630057DE4D /* DetailViewController.swift */,
 				FC28FD79280C1F7E0057DE4D /* Assets.xcassets */,
 				FC28FD7B280C1F7E0057DE4D /* LaunchScreen.storyboard */,
 				FC28FD7E280C1F7E0057DE4D /* Info.plist */,
-				FC28FD85280C21820057DE4D /* Post.swift */,
 			);
 			path = TEST;
 			sourceTree = "<group>";

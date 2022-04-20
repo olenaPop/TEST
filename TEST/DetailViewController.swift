@@ -36,7 +36,9 @@ class DetailViewController: UIViewController{
             do{
                 result = try JSONDecoder().decode(PostDetailResponse.self, from: data)
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [self] in
+                    let date = Date(timeIntervalSince1970: TimeInterval((result?.post.timeshamp)!))
+                    self.time_counterPost.text = date.formatDate(pastDate: date)
                     self.dataForDetailView = result?.post
                     self.imagePost.downloaded(from: (result?.post.postImage)!)
                     self.tittlePost.text = result?.post.title
@@ -44,7 +46,7 @@ class DetailViewController: UIViewController{
                     self.descriptionPost.text = result?.post.text
                     self.descriptionPost.isEditable = false
                     self.like_counterPost.text = String(result?.post.likes_count ?? 00)
-                    self.time_counterPost.text = String(result?.post.timeshamp ?? 00)
+                  
                     
                 }
               }

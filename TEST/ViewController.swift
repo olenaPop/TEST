@@ -11,7 +11,6 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
     var filterCategory = [ FilterParam.RATE,FilterParam.DATE]
     var toolBar = UIToolbar()
     var picker  = UIPickerView()
-
  
     @IBOutlet var postsTableView: UITableView!
     @IBOutlet var filterBttn: UIBarButtonItem!
@@ -38,13 +37,15 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
         toolBar.removeFromSuperview()
         let sortedDataByRate  =  dataForTableView?.posts.sorted(by: {$0.likes_count > $1.likes_count})
         let sortedDataByDate = dataForTableView?.posts.sorted(by: {$0.timeshamp > $1.timeshamp})
+        print("***********")
+        print("Filter parametr is \(String(describing: filterParam))")
+        print("***********")
         if filterParam == FilterParam.DATE{
                        self.dataForTableView = PostResponse(posts: sortedDataByDate!)
                    }
         else if filterParam == FilterParam.RATE{
                        self.dataForTableView = PostResponse(posts: sortedDataByRate!)
                    }
-        print(dataForTableView?.posts)
         picker.removeFromSuperview()
         postsTableView.reloadData()
        
@@ -66,21 +67,17 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
               cell.textViewLbl.text = dataForTableView.posts[indexPath.row].preview_text
               cell.timesLbl.text = String(dataForTableView.posts[indexPath.row].timeshamp)
               let date = Date(timeIntervalSince1970: TimeInterval(dataForTableView.posts[indexPath.row].timeshamp))
-              cell.timesLbl.text = formatDate(pastDate: date)
+              let currentDate = Date()
+              cell.timesLbl.text = currentDate.formatDate(pastDate: date)
         }
-        cell.expandBttn.layer.cornerRadius = 5
+        cell.expandBttn.layer.cornerRadius = 8
         cell.controller = self
         let countOfLineInTxt = cell.textViewLbl.maxNumberOfLines
-        print(cell.textViewLbl.maxNumberOfLines)
         if countOfLineInTxt > 2 {
             cell.showButton()
-            print("Succes")
         }
         return cell
     }
-    
- 
-    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let dataForTableView = dataForTableView
@@ -96,45 +93,22 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
         detailVC.postId = postIdForDetailView
     }
 
-    func formatDate(pastDate :Date) -> String{
-        
-        let todayDate = Date()
-        let interval = Calendar.current.dateComponents([.year, .month, .day], from:pastDate , to: todayDate)
-        print(todayDate)
-        print(pastDate)
-        print(interval)
-        
-            if let year = interval.year, year > 0 {
-                return year == 1 ? "\(year)" + " " + "year ago" :
-                    "\(year)" + " " + "years ago"
-            } else if let month = interval.month, month > 0 {
-                return month == 1 ? "\(month)" + " " + "month ago" :
-                    "\(month)" + " " + "months ago"
-            } else if let day = interval.day, day > 0 {
-                return day == 1 ? "\(day)" + " " + "day ago" :
-                    "\(day)" + " " + "days ago"
-            } else {
-                return "a moment ago"
-
-            }
-
-        }
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
     
     override func viewDidLoad() {
        
         super.viewDidLoad()
+        let url = "https://raw.githubusercontent.com/anton-natife/jsons/master/api/main.json"
+        getData(from: url)
+        
         postsTableView.register(UINib(nibName: "MyCustomTableViewCell", bundle: nil), forCellReuseIdentifier: "MyCustomTableViewCell")
         postsTableView.rowHeight = UITableView.automaticDimension
         postsTableView.estimatedRowHeight = 280
         postsTableView.delegate = self
         postsTableView.dataSource = self
         
-        let url = "https://raw.githubusercontent.com/anton-natife/jsons/master/api/main.json"
-        getData(from: url)
-    }
-    
-    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
     }
     
     private func getData(from url: String){
@@ -165,7 +139,6 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
          })
         task.resume()
         }
-
 }
 extension ViewController : UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -181,9 +154,7 @@ extension ViewController : UIPickerViewDelegate, UIPickerViewDataSource {
     }
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         filterParam = filterCategory[row]
-        
     }
-    
 }
 
 extension UILabel {
@@ -195,6 +166,28 @@ extension UILabel {
            let lineHeight = font.lineHeight
            return Int(ceil(textHeight / lineHeight))
        }
+}
+
+extension Date{
+    func formatDate(pastDate :Date) -> String{
+        let todayDate = Date()
+        let interval = Calendar.current.dateComponents([.year, .month, .day], from:pastDate , to: todayDate)
+            if let year = interval.year, year > 0 {
+                return year == 1 ? "\(year)" + " " + "year ago" :
+                    "\(year)" + " " + "years ago"
+            } else if let month = interval.month, month > 0 {
+                return month == 1 ? "\(month)" + " " + "month ago" :
+                    "\(month)" + " " + "months ago"
+            } else if let day = interval.day, day > 0 {
+                return day == 1 ? "\(day)" + " " + "day ago" :
+                    "\(day)" + " " + "days ago"
+            } else {
+                return "a moment ago"
+
+            }
+
+        }
+    
 }
 
 enum FilterParam : String{
