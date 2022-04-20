@@ -28,7 +28,22 @@ class MyCustomTableViewCell: UITableViewCell {
     }
     
     var controller: ViewController? = nil
-  
+    
+    @IBOutlet var topConstraint: NSLayoutConstraint!
+    
+    func hideButton() {
+      self.expandBttn.isHidden = true
+      self.topConstraint.isActive = true
+        //controller?.postsTableView.reloadData()
+    }
+
+    func showButton() {
+      self.expandBttn.isHidden = false
+      self.topConstraint.isActive = false
+       // controller?.postsTableView.reloadData()
+    }
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
        

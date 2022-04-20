@@ -7,12 +7,11 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
     var postIdForDetailView : Int?
     var dataForTableView : PostResponse?
 
-    var filterParam : String?
-    var filterCategory = ["date","rate"]
+    var filterParam : FilterParam?
+    var filterCategory = [ FilterParam.RATE,FilterParam.DATE]
     var toolBar = UIToolbar()
     var picker  = UIPickerView()
-    var flag : Bool = true
-    var countOfLineInTxt : Int?
+
  
     @IBOutlet var postsTableView: UITableView!
     @IBOutlet var filterBttn: UIBarButtonItem!
@@ -26,7 +25,6 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
          picker.contentMode = .center
          picker.frame = CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 300, width: UIScreen.main.bounds.size.width, height: 300)
          self.view.addSubview(picker)
-                 
          toolBar = UIToolbar.init(frame: CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 300, width: UIScreen.main.bounds.size.width, height: 50))
          toolBar.barStyle = .black
          toolBar.items = [UIBarButtonItem.init(title: "Done", style: .done, target: self, action: #selector(onDoneButtonTapped))]
@@ -35,15 +33,15 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
     }
     @objc func onDoneButtonTapped() {
         toolBar.removeFromSuperview()
-       // print(filterParam)
         let sortedDataByRate  =  dataForTableView?.posts.sorted(by: {$0.likes_count > $1.likes_count})
         let sortedDataByDate = dataForTableView?.posts.sorted(by: {$0.timeshamp > $1.timeshamp})
-                   if filterParam == "date"{
+        if filterParam == FilterParam.DATE{
                        self.dataForTableView = PostResponse(posts: sortedDataByDate!)
                    }
-                   else if filterParam == "rate"{
+        else if filterParam == FilterParam.RATE{
                        self.dataForTableView = PostResponse(posts: sortedDataByRate!)
                    }
+        print(dataForTableView?.posts)
         picker.removeFromSuperview()
         postsTableView.reloadData()
        
@@ -58,9 +56,7 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MyCustomTableViewCell", for: indexPath) as! MyCustomTableViewCell
-        
-        cell.expandBttn.isHidden = true
-       //
+        cell.hideButton()
         if let dataForTableView = dataForTableView{
               cell.titleLbl.text = dataForTableView.posts[indexPath.row].title
               cell.likesLbl.text = String(dataForTableView.posts[indexPath.row].likes_count)
@@ -70,12 +66,10 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
         cell.expandBttn.layer.cornerRadius = 5
         cell.controller = self
         let countOfLineInTxt = cell.textViewLbl.maxNumberOfLines
-//        cell.expandBttn.heightAnchor.constraint(equalToConstant: 0).isActive = true
+        print(cell.textViewLbl.maxNumberOfLines)
         if countOfLineInTxt > 2 {
-            cell.expandBttn.isHidden = false
-            cell.expandBttn.heightAnchor.constraint(equalToConstant: 50).isActive = true
-           
-             print("Succes")
+            cell.showButton()
+            print("Succes")
         }
         return cell
     }
@@ -99,7 +93,7 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
         super.viewDidLoad()
         postsTableView.register(UINib(nibName: "MyCustomTableViewCell", bundle: nil), forCellReuseIdentifier: "MyCustomTableViewCell")
         postsTableView.rowHeight = UITableView.automaticDimension
-        postsTableView.estimatedRowHeight = 580
+        postsTableView.estimatedRowHeight = 280
         postsTableView.delegate = self
         postsTableView.dataSource = self
         
@@ -136,7 +130,6 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
                 return
             }
             print(json.posts)
-            
          })
         task.resume()
         }
@@ -152,7 +145,7 @@ extension ViewController : UIPickerViewDelegate, UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return filterCategory[row]
+        return filterCategory[row].rawValue
     }
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         filterParam = filterCategory[row]
@@ -166,9 +159,13 @@ extension UILabel {
     var maxNumberOfLines: Int {
            let maxSize = CGSize(width: frame.size.width, height: CGFloat(MAXFLOAT))
            let text = (self.text ?? "") as NSString
-        let textHeight = text.boundingRect(with: maxSize, options: .usesLineFragmentOrigin, attributes: [.font: font!], context: nil).height
+           let textHeight = text.boundingRect(with: maxSize, options: .usesLineFragmentOrigin, attributes: [.font: font!], context: nil).height
            let lineHeight = font.lineHeight
            return Int(ceil(textHeight / lineHeight))
        }
 }
 
+enum FilterParam : String{
+    case DATE =  "Sort by: Date"
+    case RATE =  "Sort by: Rate"
+}
